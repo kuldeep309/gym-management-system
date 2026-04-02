@@ -282,10 +282,7 @@ class HomeScreen extends StatelessWidget {
                 subtitle: 'Book your gym classes easily. This will be added in Sprint 3.',
                 iconBgColor: const Color(0xFF06B6D4),
                 onTap: () {
-                  _showComingSoon(
-                    context,
-                    'Class Booking will be added in Sprint 3',
-                  );
+                  Navigator.pushNamed(context, '/class-booking');
                 },
               ),
               _buildFeatureCard(
