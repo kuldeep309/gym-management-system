@@ -1,44 +1,109 @@
 import 'package:flutter/material.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  String selectedMembership = 'No plan selected';
+  String selectedClass = 'No class booked';
+  String selectedTrainer = 'No trainer selected';
+
+  Widget _buildSummaryCard({
+    required IconData icon,
+    required String title,
+    required String value,
+    required Color color,
+  }) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 14),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(18),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Container(
+            height: 52,
+            width: 52,
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.12),
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Icon(icon, color: color, size: 28),
+          ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    color: Color(0xFF64748B),
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  value,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Color(0xFF0F172A),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildFeatureCard({
-    required BuildContext context,
     required IconData icon,
     required String title,
     required String subtitle,
-    required Color iconBgColor,
+    required Color color,
     required VoidCallback onTap,
   }) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 16),
+      margin: const EdgeInsets.only(bottom: 14),
       child: Material(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(22),
-        elevation: 3,
+        borderRadius: BorderRadius.circular(20),
+        elevation: 2,
         shadowColor: Colors.black12,
         child: InkWell(
-          borderRadius: BorderRadius.circular(22),
+          borderRadius: BorderRadius.circular(20),
           onTap: onTap,
           child: Padding(
             padding: const EdgeInsets.all(18),
             child: Row(
               children: [
                 Container(
-                  height: 58,
-                  width: 58,
+                  height: 56,
+                  width: 56,
                   decoration: BoxDecoration(
-                    color: iconBgColor.withOpacity(0.12),
-                    borderRadius: BorderRadius.circular(18),
+                    color: color.withOpacity(0.12),
+                    borderRadius: BorderRadius.circular(16),
                   ),
-                  child: Icon(
-                    icon,
-                    color: iconBgColor,
-                    size: 30,
-                  ),
+                  child: Icon(icon, color: color, size: 28),
                 ),
-                const SizedBox(width: 16),
+                const SizedBox(width: 14),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -46,36 +111,28 @@ class HomeScreen extends StatelessWidget {
                       Text(
                         title,
                         style: const TextStyle(
-                          fontSize: 18,
+                          fontSize: 17,
                           fontWeight: FontWeight.w700,
                           color: Color(0xFF0F172A),
                         ),
                       ),
-                      const SizedBox(height: 6),
+                      const SizedBox(height: 5),
                       Text(
                         subtitle,
                         style: const TextStyle(
-                          fontSize: 14,
+                          fontSize: 13.5,
                           color: Color(0xFF64748B),
-                          height: 1.5,
+                          height: 1.4,
                         ),
                       ),
                     ],
                   ),
                 ),
                 const SizedBox(width: 10),
-                Container(
-                  height: 34,
-                  width: 34,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFF1F5F9),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const Icon(
-                    Icons.arrow_forward_ios_rounded,
-                    size: 16,
-                    color: Color(0xFF64748B),
-                  ),
+                const Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  size: 16,
+                  color: Color(0xFF94A3B8),
                 ),
               ],
             ),
@@ -85,60 +142,31 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildQuickStat({
-    required IconData icon,
-    required String title,
-    required String value,
-    required Color color,
-  }) {
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-        decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.16),
-          borderRadius: BorderRadius.circular(18),
-          border: Border.all(
-            color: Colors.white.withOpacity(0.18),
-          ),
-        ),
-        child: Column(
-          children: [
-            Icon(icon, color: Colors.white, size: 24),
-            const SizedBox(height: 10),
-            Text(
-              value,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              title,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 12,
-                color: Colors.white70,
-                height: 1.4,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+  Future<void> _openMembership() async {
+    final result = await Navigator.pushNamed(context, '/membership');
+    if (result != null && result is String) {
+      setState(() {
+        selectedMembership = result;
+      });
+    }
   }
 
-  void _showComingSoon(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        behavior: SnackBarBehavior.floating,
-        content: Text(message),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(14),
-        ),
-      ),
-    );
+  Future<void> _openClassBooking() async {
+    final result = await Navigator.pushNamed(context, '/class-booking');
+    if (result != null && result is String) {
+      setState(() {
+        selectedClass = result;
+      });
+    }
+  }
+
+  Future<void> _openTrainerDetails() async {
+    final result = await Navigator.pushNamed(context, '/trainer-details');
+    if (result != null && result is String) {
+      setState(() {
+        selectedTrainer = result;
+      });
+    }
   }
 
   @override
@@ -146,15 +174,18 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFC),
       appBar: AppBar(
-        title: const Text('Gym Dashboard'),
+        title: const Text(
+          'Gym Dashboard',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         automaticallyImplyLeading: false,
-        elevation: 0,
         backgroundColor: const Color(0xFFF8FAFC),
         foregroundColor: const Color(0xFF0F172A),
+        elevation: 0,
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
+          padding: const EdgeInsets.fromLTRB(20, 10, 20, 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -163,142 +194,102 @@ class HomeScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(22),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
-                    colors: [
-                      Color(0xFF1D4ED8),
-                      Color(0xFF3B82F6),
-                    ],
+                    colors: [Color(0xFF2563EB), Color(0xFF1D4ED8)],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
-                  borderRadius: BorderRadius.circular(28),
+                  borderRadius: BorderRadius.circular(26),
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xFF3B82F6).withOpacity(0.25),
-                      blurRadius: 24,
-                      offset: const Offset(0, 10),
+                      color: const Color(0xFF2563EB).withOpacity(0.22),
+                      blurRadius: 20,
+                      offset: const Offset(0, 8),
                     ),
                   ],
                 ),
-                child: Column(
+                child: const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 7,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.18),
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: const Text(
-                        'Fitness Dashboard',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    const Text(
-                      'Welcome to Gym Management System',
+                    Text(
+                      'Welcome Back!',
                       style: TextStyle(
-                        fontSize: 25,
+                        fontSize: 26,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
-                        height: 1.3,
                       ),
                     ),
-                    const SizedBox(height: 10),
-                    const Text(
-                      'Track your gym services, manage memberships, and explore upcoming features from one place.',
+                    SizedBox(height: 8),
+                    Text(
+                      'Manage your membership, classes, and trainers from one place.',
                       style: TextStyle(
                         fontSize: 14,
                         color: Colors.white70,
-                        height: 1.6,
+                        height: 1.5,
                       ),
-                    ),
-                    const SizedBox(height: 22),
-                    Row(
-                      children: [
-                        _buildQuickStat(
-                          icon: Icons.card_membership,
-                          title: 'Plans',
-                          value: '3',
-                          color: Colors.white,
-                        ),
-                        const SizedBox(width: 12),
-                        _buildQuickStat(
-                          icon: Icons.event_available,
-                          title: 'Classes',
-                          value: '4+',
-                          color: Colors.white,
-                        ),
-                        const SizedBox(width: 12),
-                        _buildQuickStat(
-                          icon: Icons.fitness_center,
-                          title: 'Trainers',
-                          value: '3+',
-                          color: Colors.white,
-                        ),
-                      ],
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 28),
+              const SizedBox(height: 26),
               const Text(
-                'Features',
+                'Your Activity',
                 style: TextStyle(
-                  fontSize: 22,
+                  fontSize: 21,
                   fontWeight: FontWeight.bold,
                   color: Color(0xFF0F172A),
                 ),
               ),
-              const SizedBox(height: 6),
+              const SizedBox(height: 14),
+              _buildSummaryCard(
+                icon: Icons.card_membership_rounded,
+                title: 'Selected Membership',
+                value: selectedMembership,
+                color: const Color(0xFF8B5CF6),
+              ),
+              _buildSummaryCard(
+                icon: Icons.event_available_rounded,
+                title: 'Booked Class',
+                value: selectedClass,
+                color: const Color(0xFF06B6D4),
+              ),
+              _buildSummaryCard(
+                icon: Icons.fitness_center_rounded,
+                title: 'Selected Trainer',
+                value: selectedTrainer,
+                color: const Color(0xFFF97316),
+              ),
+              const SizedBox(height: 20),
               const Text(
-                'Explore the available modules of the application.',
+                'Features',
                 style: TextStyle(
-                  fontSize: 14,
-                  color: Color(0xFF64748B),
+                  fontSize: 21,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF0F172A),
                 ),
               ),
-              const SizedBox(height: 18),
+              const SizedBox(height: 14),
               _buildFeatureCard(
-                context: context,
                 icon: Icons.card_membership_rounded,
                 title: 'Membership Plans',
-                subtitle: 'View and manage your membership packages.',
-                iconBgColor: const Color(0xFF8B5CF6),
-                onTap: () {
-                  Navigator.pushNamed(context, '/membership');
-                },
+                subtitle: 'Choose a gym membership package.',
+                color: const Color(0xFF8B5CF6),
+                onTap: _openMembership,
               ),
               _buildFeatureCard(
-                context: context,
                 icon: Icons.event_available_rounded,
                 title: 'Class Booking',
-                subtitle: 'Book your gym classes easily. This will be added in Sprint 3.',
-                iconBgColor: const Color(0xFF06B6D4),
-                onTap: () {
-                  Navigator.pushNamed(context, '/class-booking');
-                },
+                subtitle: 'Book your preferred fitness class.',
+                color: const Color(0xFF06B6D4),
+                onTap: _openClassBooking,
               ),
               _buildFeatureCard(
-                context: context,
                 icon: Icons.fitness_center_rounded,
                 title: 'Trainer Details',
-                subtitle: 'View trainer information. This will be added in Sprint 4.',
-                iconBgColor: const Color(0xFFF97316),
-                onTap: () {
-                  _showComingSoon(
-                    context,
-                    'Trainer module will be added in Sprint 4',
-                  );
-                },
+                subtitle: 'View trainer profile and expertise.',
+                color: const Color(0xFFF97316),
+                onTap: _openTrainerDetails,
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 18),
               SizedBox(
                 width: double.infinity,
                 child: OutlinedButton.icon(
