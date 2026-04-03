@@ -146,6 +146,10 @@ class MembershipScreen extends StatelessWidget {
                         content: Text('$title selected successfully'),
                       ),
                     );
+
+                    Future.delayed(const Duration(milliseconds: 500), () {
+                      Navigator.pop(context, title);
+                    });
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: accentColor,

@@ -92,6 +92,10 @@ class ClassBookingScreen extends StatelessWidget {
                         content: Text('$title booked successfully'),
                       ),
                     );
+
+                    Future.delayed(const Duration(milliseconds: 500), () {
+                      Navigator.pop(context, title);
+                    });
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: color,
@@ -108,7 +112,7 @@ class ClassBookingScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),
@@ -170,7 +174,6 @@ class ClassBookingScreen extends StatelessWidget {
             children: [
               _buildHeader(),
               const SizedBox(height: 24),
-
               _buildClassCard(
                 context: context,
                 title: 'Yoga Class',
@@ -180,7 +183,6 @@ class ClassBookingScreen extends StatelessWidget {
                 icon: Icons.self_improvement,
                 color: Colors.green,
               ),
-
               _buildClassCard(
                 context: context,
                 title: 'Zumba',
@@ -190,7 +192,6 @@ class ClassBookingScreen extends StatelessWidget {
                 icon: Icons.music_note,
                 color: Colors.purple,
               ),
-
               _buildClassCard(
                 context: context,
                 title: 'Cardio Training',
@@ -200,7 +201,6 @@ class ClassBookingScreen extends StatelessWidget {
                 icon: Icons.favorite,
                 color: Colors.red,
               ),
-
               _buildClassCard(
                 context: context,
                 title: 'Strength Training',

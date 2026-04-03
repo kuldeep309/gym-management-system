@@ -5,6 +5,7 @@ import 'screens/signup_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/membership_screen.dart';
 import 'screens/class_booking_screen.dart';
+import 'screens/trainer_details_screen.dart';
 
 void main() {
   runApp(const GymManagementApp());
@@ -85,6 +86,7 @@ class GymManagementApp extends StatelessWidget {
         '/home': (context) => const HomeScreen(),
         '/membership': (context) => const MembershipScreen(),
         '/class-booking': (context) => const ClassBookingScreen(),
+        '/trainer-details': (context) => const TrainerDetailsScreen(),
       },
     );
   }
